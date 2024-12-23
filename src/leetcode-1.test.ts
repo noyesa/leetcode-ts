@@ -1,5 +1,5 @@
-import { describe, it } from "node:test";
-import assert from "node:assert";
+import { describe, it } from 'node:test';
+import assert from 'node:assert';
 
 /**
  * Find the pair of indices whose values in nums adds up to target.
@@ -19,20 +19,20 @@ function twoSum(nums: number[], target: number): number[] | undefined {
   }
 }
 
-describe("twoSum()", () => {
-  it("example #1", () => {
+describe('twoSum()', () => {
+  it('example #1', () => {
     const nums = [2, 7, 11, 15];
     const target = 9;
     assert.deepEqual(twoSum(nums, target), [0, 1]);
   });
 
-  it("example #2", () => {
+  it('example #2', () => {
     const nums = [3, 2, 4];
     const target = 6;
     assert.deepEqual(twoSum(nums, target), [1, 2]);
   });
 
-  it("example #3", () => {
+  it('example #3', () => {
     const nums = [3, 3];
     const target = 6;
     assert.deepEqual(twoSum(nums, target), [0, 1]);
