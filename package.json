@@ -1,0 +1,19 @@
+{
+  "name": "leetcode-ts",
+  "version": "1.0.0",
+  "description": "Leetcode, done in TypeScript.",
+  "main": "lib/index.js",
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "watch-tests": "node --test --watch",
+    "test": "npm run build && node --test"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.10.2",
+    "typescript": "^5.7.2"
+  }
+}
