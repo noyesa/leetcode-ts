@@ -4,16 +4,16 @@ import assert from 'node:assert';
 /**
  * A node in a linked list.
  */
-class ListNode {
-  val: number;
-  next: ListNode | null;
+class ListNode<T> {
+  val: T;
+  next: ListNode<T> | null;
 
   /**
    * Initialize list node.
-   * @param [val=0] - Value of the list node.
+   * @param val - Value of the list node.
    * @param [next=null] - Next node in the list.
    */
-  constructor(val = 0, next: ListNode | null = null) {
+  constructor(val: T, next: ListNode<T> | null = null) {
     this.val = val;
     this.next = next;
   }
@@ -24,13 +24,17 @@ class ListNode {
    * @param other - The other list to compare this with.
    * @returns Do the lists contain equal values?
    */
-  isEqual(other: ListNode): boolean {
+  isEqual(other: ListNode<T>): boolean {
     if (this === other) {
       return true;
     }
 
-    let thisHead: ListNode | null = this;
-    let otherHead: ListNode | null = other;
+    if (!other) {
+      return false;
+    }
+
+    let thisHead: ListNode<T> | null = this;
+    let otherHead: ListNode<T> | null = other;
     while (thisHead && otherHead) {
       if (thisHead.val !== otherHead.val) {
         return false;
@@ -47,26 +51,26 @@ class ListNode {
    * @param array - Array to convert to linked list.
    * @returns Linked list created from values in array.
    */
-  static fromArray(array: number[]): ListNode {
+  static from<T>(array: T[]): ListNode<T> {
     if (array.length === 0) {
       throw new TypeError('cannot build linked list from empty array.');
     }
     return array.reduceRight(
-      (nextNode: ListNode | null, val) => new ListNode(val, nextNode),
+      (nextNode: ListNode<T> | null, val) => new ListNode(val, nextNode),
       null,
-    ) as ListNode;
+    ) as ListNode<T>;
   }
 }
 
 describe('ListNode', () => {
   it('sets default values correctly', () => {
-    const node = new ListNode();
+    const node = new ListNode(0);
     assert.equal(node.val, 0);
     assert.equal(node.next, null);
   });
 
   it('sets properties to the values passed to constructor', () => {
-    const dummy = new ListNode();
+    const dummy = new ListNode(0);
     const node = new ListNode(10, dummy);
     assert.equal(node.val, 10);
     assert.equal(node.next, dummy);
@@ -74,26 +78,26 @@ describe('ListNode', () => {
 
   describe('isEqual', () => {
     it('returns false if an unequal list is passed', () => {
-      const list1 = ListNode.fromArray([1, 2, 3]) as ListNode;
-      const list2 = ListNode.fromArray([2, 3, 4]) as ListNode;
+      const list1 = ListNode.from([1, 2, 3]) as ListNode<number>;
+      const list2 = ListNode.from([2, 3, 4]) as ListNode<number>;
       assert.equal(list1.isEqual(list2), false);
     });
 
     it('returns true if the same list is passed', () => {
-      const list1 = ListNode.fromArray([1, 2, 3]) as ListNode;
+      const list1 = ListNode.from([1, 2, 3]) as ListNode<number>;
       assert.ok(list1.isEqual(list1));
     });
 
     it('returns true if an equal list is passed', () => {
-      const list1 = ListNode.fromArray([1, 2, 3]) as ListNode;
-      const list2 = ListNode.fromArray([1, 2, 3]) as ListNode;
+      const list1 = ListNode.from([1, 2, 3]) as ListNode<number>;
+      const list2 = ListNode.from([1, 2, 3]) as ListNode<number>;
       assert.ok(list1.isEqual(list2));
     });
   });
 
-  describe('fromArray', () => {
+  describe('from', () => {
     it('builds a linked list from an array', () => {
-      const list = ListNode.fromArray([4, 1, 2]);
+      const list = ListNode.from([4, 1, 2]);
       // The list was created.
       assert.ok(list);
 
@@ -108,10 +112,87 @@ describe('ListNode', () => {
 
     it('throws when an empty array is passed', () => {
       assert.throws(() => {
-        ListNode.fromArray([]);
+        ListNode.from([]);
       });
     });
   });
 });
 
-describe('addTwoNumbers', () => {});
+/**
+ * Adds together two numbers represented as reverse-order linked lists of their
+ * digits.
+ * @param num1 - The first number.
+ * @param num2 - The second number.
+ * @returns The sum of the first and second numbers.
+ */
+function addTwoNumbers(
+  num1: ListNode<number>,
+  num2: ListNode<number>,
+): ListNode<number> | null {
+  // Use dummy node so we can always append.
+  const dummyNode = new ListNode(0);
+  let out = dummyNode;
+
+  let head1: ListNode<number> | null = num1;
+  let head2: ListNode<number> | null = num2;
+  let carry = false;
+  while (head1 || head2) {
+    let sum = 0;
+
+    if (carry) {
+      sum += 1;
+      carry = false;
+    }
+
+    if (head1) {
+      sum += head1.val;
+      head1 = head1.next;
+    }
+
+    if (head2) {
+      sum += head2.val;
+      head2 = head2.next;
+    }
+
+    if (sum > 9) {
+      sum -= 10;
+      carry = true;
+    }
+
+    const newNode = new ListNode(sum);
+    out.next = newNode;
+    out = newNode;
+  }
+
+  if (carry) {
+    out.next = new ListNode(1);
+  }
+
+  return dummyNode.next;
+}
+
+describe('addTwoNumbers', () => {
+  it('example #1', () => {
+    assert.ok(
+      addTwoNumbers(
+        ListNode.from([2, 4, 3]),
+        ListNode.from([5, 6, 4]),
+      )?.isEqual(ListNode.from([7, 0, 8])),
+    );
+  });
+
+  it('example #2', () => {
+    assert.ok(
+      addTwoNumbers(ListNode.from([0]), ListNode.from([0]))?.isEqual(
+        ListNode.from([0]),
+      ),
+    );
+  });
+
+  it('example #3', () => {
+    const l1 = ListNode.from([9, 9, 9, 9, 9, 9, 9]);
+    const l2 = ListNode.from([9, 9, 9, 9]);
+    const result = addTwoNumbers(l1, l2);
+    assert.ok(result?.isEqual(ListNode.from([8, 9, 9, 9, 0, 0, 0, 1])));
+  });
+});
