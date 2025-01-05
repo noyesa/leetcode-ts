@@ -5,11 +5,7 @@ import assert from 'assert';
  * Response from a guess checker indicating whether the guess was lower than,
  * equal to, or higher than the target.
  */
-enum HighOrLow {
-  Low = -1,
-  Equal,
-  High,
-}
+type HighOrLow = -1 | 0 | 1;
 
 interface GuessChecker {
   (guess: number): HighOrLow;
@@ -24,31 +20,31 @@ interface GuessChecker {
 function makeGuessChecker(target: number): GuessChecker {
   return (guess: number): HighOrLow => {
     if (guess < target) {
-      return HighOrLow.Low;
+      return -1;
     }
 
     if (guess === target) {
-      return HighOrLow.Equal;
+      return 0;
     }
 
-    return HighOrLow.High;
+    return 1;
   };
 }
 
 describe('guessMaker', () => {
   it('returns Low if the guess was below the target', () => {
     const checker = makeGuessChecker(5);
-    assert.equal(checker(4), HighOrLow.Low);
+    assert.equal(checker(4), -1);
   });
 
   it('returns High if the guess was above the target', () => {
     const checker = makeGuessChecker(5);
-    assert.equal(checker(6), HighOrLow.High);
+    assert.equal(checker(6), 1);
   });
 
   it('returns Equal if the guess matches the target', () => {
     const checker = makeGuessChecker(5);
-    assert.equal(checker(5), HighOrLow.Equal);
+    assert.equal(checker(5), 0);
   });
 });
 
@@ -65,11 +61,11 @@ function guessNumber(n: number, checker: GuessChecker): number {
   while (left <= right) {
     const guess = left + Math.floor((right - left) / 2);
     const result = checker(guess);
-    if (result === HighOrLow.Equal) {
+    if (result === 0) {
       return guess;
     }
 
-    if (result === HighOrLow.Low) {
+    if (result === -1) {
       left = guess + 1;
     } else {
       right = guess - 1;
