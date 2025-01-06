@@ -1,6 +1,5 @@
-import { describe, beforeEach, it, afterEach } from 'node:test';
+import { describe, beforeEach, it, afterEach, mock } from 'node:test';
 import assert from 'node:assert';
-import sinon, { SinonFakeTimers } from 'sinon';
 
 class TimeLimitedCacheEntry {
   /**
@@ -97,14 +96,12 @@ class TimeLimitedCache {
 }
 
 describe('TimeLimitedCache', () => {
-  let clock: SinonFakeTimers;
-
   beforeEach(() => {
-    clock = sinon.useFakeTimers();
+    mock.timers.enable({ apis: ['Date'] });
   });
 
   afterEach(() => {
-    clock.restore();
+    mock.timers.reset();
   });
 
   describe('get', () => {
@@ -122,9 +119,9 @@ describe('TimeLimitedCache', () => {
     it('returns -1 for previously valid keys that have expired', () => {
       const cache = new TimeLimitedCache();
       cache.set(3, 10, 1000);
-      clock.tick(500);
+      mock.timers.tick(500);
       assert.equal(cache.get(3), 10);
-      clock.tick(500);
+      mock.timers.tick(500);
       assert.equal(cache.get(3), -1);
     });
   });
@@ -162,13 +159,13 @@ describe('TimeLimitedCache', () => {
       cache.set(1, 2, 1000);
       cache.set(2, 3, 2000);
       assert.equal(cache.count(), 2);
-      clock.tick(1000);
+      mock.timers.tick(1000);
       assert.equal(cache.count(), 2);
-      clock.tick(1);
+      mock.timers.tick(1);
       assert.equal(cache.count(), 1);
-      clock.tick(999);
+      mock.timers.tick(999);
       assert.equal(cache.count(), 1);
-      clock.tick(1);
+      mock.timers.tick(1);
       assert.equal(cache.count(), 0);
     });
   });
