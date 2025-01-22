@@ -1,8 +1,8 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert';
 
-function solution(isBadVersion) {
-  return (n) => {
+function solution(isBadVersion: (n: number) => boolean): (n: number) => number {
+  return (n: number) => {
     let left = 0;
     let right = n;
 
