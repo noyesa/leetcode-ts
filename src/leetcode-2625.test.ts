@@ -3,6 +3,12 @@ import assert from 'node:assert';
 
 type MultiDimensionalArray = (number | MultiDimensionalArray)[];
 
+/**
+ * Flattens a multi-dimensional array up to n levels deep.
+ * @param arr - Array containing either numbers or other arrays of numbers
+ * @param n - The number of levels deep to iterate.
+ * @returns The flattened array.
+ */
 function flat(arr: MultiDimensionalArray, n: number): MultiDimensionalArray {
   const output: MultiDimensionalArray = [];
   if (n === 0) {
