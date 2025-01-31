@@ -98,3 +98,36 @@ describe('waysToSplitArray', () => {
     assert.equal(waysToSplitArray(nums), 2);
   });
 });
+
+/**
+ * Second algorithm for finding splits in array.
+ * @param nums - Array of numbers to find splits in.
+ * @returns Number of splits in the input nums
+ */
+function waysToSplitArray2(nums: number[]): number {
+  let splits = 0;
+  let left = 0;
+  let right = nums.reduce((sum, x) => sum + x, 0);
+  for (let i = 0; i < nums.length - 1; ++i) {
+    left += nums[i];
+    right -= nums[i];
+
+    if (left >= right) {
+      ++splits;
+    }
+  }
+
+  return splits;
+}
+
+describe('waysToSplitArray2', () => {
+  it('solves example #1', () => {
+    const nums = [10, 4, -8, 7];
+    assert.equal(waysToSplitArray2(nums), 2);
+  });
+
+  it('solves example #2', () => {
+    const nums = [2, 3, 1, 0];
+    assert.equal(waysToSplitArray2(nums), 2);
+  });
+});
