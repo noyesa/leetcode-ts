@@ -2,19 +2,19 @@ import { describe, it } from 'node:test';
 import assert from 'node:assert';
 
 /**
- * Gets the prefix of an array of numbers.
+ * Gets the prefix of an array of numbers. A prefix is an array where each
+ * index represents the running sum of the source array at that index.
  * @params nums - Numbers for which to compute prefix.
- * @returns Prefix array
+ * @returns Prefix array.
  */
 function getArrayPrefix(nums: number[]): number[] {
   if (nums.length === 0) {
     return [];
   }
 
-  const prefix = new Array(nums.length);
-  prefix[0] = nums[0];
+  const prefix = [nums[0]];
   for (let i = 1; i < nums.length; ++i) {
-    prefix[i] = nums[i] + prefix[i - 1];
+    prefix.push(nums[i] + prefix[i - 1]);
   }
   return prefix;
 }
@@ -49,11 +49,30 @@ function getPrefixRangeSum(
   return prefix[end];
 }
 
+describe('getPrefixRangeSum', () => {
+  it('gets the sum of a range from an index to the end with only a start', () => {
+    const nums = [1, 3, 5, 7];
+    // prefix = [1, 4, 9, 16]
+    const prefix = getArrayPrefix(nums);
+    assert.equal(getPrefixRangeSum(prefix, 0), 16);
+    assert.equal(getPrefixRangeSum(prefix, 1), 15);
+  });
+
+  it('gets the sum of a subarray with a start and end', () => {
+    // prefix = [1, 4, 9, 16]
+    const nums = [1, 3, 5, 7];
+    const prefix = getArrayPrefix(nums);
+    assert.equal(getPrefixRangeSum(prefix, 1, 2), 8);
+  });
+});
+
 /**
  * nums contains a valid split at index i if the following are true:
  *   - The sum of the first i + 1 elements is great than or equal to the sum
  *     of the last n - i - 1 elements.
  *   - There is at least one element to the right of i, so 0 <= i < n - 1.
+ * @param nums - The array to find splits in.
+ * @returns The number of the splits in the array.
  */
 function waysToSplitArray(nums: number[]): number {
   const prefix = getArrayPrefix(nums);
