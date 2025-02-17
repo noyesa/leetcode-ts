@@ -8,11 +8,9 @@ import assert from 'node:assert';
  * @param end - The end index of the subarray.
  */
 function reverseSubarray<T>(a: T[], start: number, end: number) {
-  let i = start;
   let j;
-  while (i < (j = end - (i - start))) {
+  for (let i = start; i < (j = end - (i - start)); ++i) {
     [a[i], a[j]] = [a[j], a[i]];
-    ++i;
   }
 }
 
@@ -41,16 +39,16 @@ function reverseWords(s: string[]): void {
       ++i;
     } else {
       // Find the end of the word.
-      let j = i;
-      while (j < s.length - 1 && s[j + 1] !== ' ') {
-        ++j;
+      let j = s.indexOf(' ', i + 1);
+      if (j === -1) {
+        j = s.length;
       }
 
       // Reverse the word.
-      reverseSubarray(s, i, j);
+      reverseSubarray(s, i, j - 1);
 
       // Advance to the next word, skipping the space.
-      i = j + 2;
+      i = j + 1;
     }
   }
 }
