@@ -16,7 +16,7 @@ function reverseSubarray<T>(a: T[], start: number, end: number) {
   }
 }
 
-describe('reverseWord', () => {
+describe('reverseSubarray', () => {
   it('reverses from start to end index', () => {
     const a = [0, 1, 2, 3, 4];
     reverseSubarray(a, 1, 3);
