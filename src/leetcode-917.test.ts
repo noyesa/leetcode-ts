@@ -4,9 +4,10 @@ import assert from 'node:assert';
 /**
  * Creates an array ranging from 0 through length - 1.
  * @param length - The length of the range.
+ * @param [start=0] - The start value of the range.
  */
-const range = (length: number): number[] =>
-  Array.from({ length }, (_, i: number) => i);
+const range = (length: number, start: number = 0): number[] =>
+  Array.from({ length }, (_, i: number) => i + start);
 
 /**
  * Gets the char code of a single character.
@@ -31,9 +32,7 @@ describe('charCode', () => {
  */
 const getAlphabetString = (isUpperCase: boolean = false): string => {
   const aCode = charCode(isUpperCase ? 'A' : 'a');
-  return range(26)
-    .map((_, i) => String.fromCharCode(aCode + i))
-    .join('');
+  return String.fromCharCode(...range(26, aCode));
 };
 
 describe('getAlphabetString', () => {
