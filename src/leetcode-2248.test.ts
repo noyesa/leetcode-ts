@@ -28,7 +28,7 @@ function intersection(nums: number[][]): number[] {
     }
   }
 
-  return output.toSorted();
+  return output.toSorted((a, b) => a - b);
 }
 
 describe('intersection', () => {
@@ -48,5 +48,13 @@ describe('intersection', () => {
     ];
 
     assert.deepEqual(intersection(nums), []);
+  });
+
+  it('solves example #3', () => {
+    const nums = [
+      [4, 43, 15, 30, 27, 22],
+      [15, 30, 43, 27, 10, 4],
+    ];
+    assert.deepEqual(intersection(nums), [4, 15, 27, 30, 43]);
   });
 });
