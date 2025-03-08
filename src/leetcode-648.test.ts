@@ -79,9 +79,7 @@ class Trie {
         return null;
       }
     }
-
-    // If we get here we found an exact match.
-    return head.value;
+    return null;
   }
 
   /**
