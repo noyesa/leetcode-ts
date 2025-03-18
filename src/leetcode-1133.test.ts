@@ -21,10 +21,7 @@ function largestUniqueNumber(nums: number[]): number {
     }
   }
 
-  let largest = -Infinity;
-  unique.forEach((num) => {
-    largest = Math.max(largest, num);
-  });
+  const largest = Math.max(...unique);
   return Number.isFinite(largest) ? largest : -1;
 }
 
