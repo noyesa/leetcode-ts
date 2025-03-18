@@ -1,6 +1,11 @@
 import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 
+/**
+ * Finds the longest subarray that contains an equal number of 0s and 1s.
+ * @param nums - The array of 0s and 1s.
+ * @returns The length of the longest subarray with matches 0s and 1s.
+ */
 function findMaxLength(nums: number[]): number {
   let sum = 0;
   let max = -Infinity;
@@ -16,7 +21,6 @@ function findMaxLength(nums: number[]): number {
       seen.set(sum, i);
     }
   }
-
   return Number.isFinite(max) ? max : -1;
 }
 
