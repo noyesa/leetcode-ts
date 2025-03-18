@@ -21,10 +21,10 @@ function largestUniqueNumber(nums: number[]): number {
     }
   }
 
-  const largest = Array.from(unique).reduce(
-    (largest, num) => Math.max(largest, num),
-    -Infinity,
-  );
+  let largest = -Infinity;
+  unique.forEach((num) => {
+    largest = Math.max(largest, num);
+  });
   return Number.isFinite(largest) ? largest : -1;
 }
 
